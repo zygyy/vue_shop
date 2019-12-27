@@ -1,9 +1,23 @@
 <template>
   <div class="login_container">
     <div class="login_box">
+      <!-- 头像区域 -->
       <div class="avatar_box">
         <img src="../assets/logo.png" alt />
       </div>
+      <!-- 登录表单区域 -->
+      <el-form label-width="0px" class="login_form">
+        <el-form-item>
+          <el-input prefix-icon="iconfont icon-user"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input prefix-icon="iconfont icon-3702mima"></el-input>
+        </el-form-item>
+        <el-form-item class="btns">
+          <el-button type="primary">登录</el-button>
+          <el-button type="info">重置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -12,14 +26,14 @@ export default {};
 </script>
 <style lang="less" scoped>
 .login_container {
-  background-color: #2b4b6b;
+  background-color: aqua;
   height: 100%;
 }
 
 .login_box {
   width: 450px;
   height: 300px;
-  background-color:  #2b4b6b;
+  background-color: #2b4b6b;
   border-radius: 3px;
   position: absolute;
   left: 50%;
@@ -44,5 +58,16 @@ export default {};
       background-color: #eee;
     }
   }
+}
+.btns {
+  display: flex;
+  justify-content: flex-end;
+}
+.login_form {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box
 }
 </style>
