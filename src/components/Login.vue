@@ -6,12 +6,18 @@
         <img src="../assets/logo.png" alt />
       </div>
       <!-- 登录表单区域 -->
-      <el-form label-width="0px" class="login_form">
-        <el-form-item>
-          <el-input prefix-icon="iconfont icon-user"></el-input>
+      <el-form :rules="loginFromRules" :model="loginFrom" label-width="0px" class="login_form">
+        <!-- 用户名 -->
+        <el-form-item prop="username">
+          <el-input v-model="loginFrom.username" prefix-icon="iconfont icon-user"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input prefix-icon="iconfont icon-3702mima"></el-input>
+        <!-- 密码 -->
+        <el-form-item prop="password">
+          <el-input
+            type="password"
+            v-model="loginFrom.password"
+            prefix-icon="iconfont icon-3702mima"
+          ></el-input>
         </el-form-item>
         <el-form-item class="btns">
           <el-button type="primary">登录</el-button>
@@ -22,7 +28,43 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      loginFrom: {
+        username: "",
+        password: ""
+      },
+      //表单验证规则
+      loginFromRules: {
+        username: [
+          {
+            required: true,
+            message: "请输入用户名称",
+            trigger: "blur"
+          },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在3到10个字符",
+            trigger: "blur"
+          }
+        ],
+        password: [{
+            required: true,
+            message: "请输入账号密码",
+            trigger: "blur"
+          },
+          {
+            min: 6,
+            max: 15,
+            message: "长度在6到15个字符",
+            trigger: "blur"
+          }]
+      }
+    };
+  }
+};
 </script>
 <style lang="less" scoped>
 .login_container {
@@ -68,6 +110,6 @@ export default {};
   bottom: 0;
   width: 100%;
   padding: 0 20px;
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 </style>
