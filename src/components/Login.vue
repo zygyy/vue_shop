@@ -6,7 +6,13 @@
         <img src="../assets/logo.png" alt />
       </div>
       <!-- 登录表单区域 -->
-      <el-form :rules="loginFromRules" :model="loginFrom" label-width="0px" class="login_form">
+      <el-form
+        ref="loginFromRef"
+        :rules="loginFromRules"
+        :model="loginFrom"
+        label-width="0px"
+        class="login_form"
+      >
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input v-model="loginFrom.username" prefix-icon="iconfont icon-user"></el-input>
@@ -20,8 +26,8 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button type="primary">登录</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -50,7 +56,8 @@ export default {
             trigger: "blur"
           }
         ],
-        password: [{
+        password: [
+          {
             required: true,
             message: "请输入账号密码",
             trigger: "blur"
@@ -60,9 +67,31 @@ export default {
             max: 15,
             message: "长度在6到15个字符",
             trigger: "blur"
-          }]
+          }
+        ]
       }
     };
+  },
+  methods: {
+    //重置功能
+    resetLoginForm() {
+      this.$refs.loginFromRef.resetFields();
+    },
+    login() {
+      // 预验证，先获取引用对象，在调用validate函数
+      this.$refs.loginFromRef.validate(async valid => {
+        //console.log(valid)
+        if (!valid) {
+          return;
+        } else {
+          const { data: result } = await this.$http.post(
+            "login",
+            this.loginFrom
+          );
+          console.log(result);
+        }
+      });
+    }
   }
 };
 </script>
