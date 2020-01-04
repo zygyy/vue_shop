@@ -54,7 +54,7 @@
     </el-card>
 
     <!-- 添加用户对话框 -->
-    <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%">
+    <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
       <el-form
         :model="addForm"
         :rules="addFormRules"
@@ -77,14 +77,34 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
+import { async } from 'q'
 export default {
   data() {
+    //邮箱的验证规则
+    var checkEmail=(rule,value,cb)=>{
+        const regEamil=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+        if(regEamil.test(value)){
+          return cb()
+        }else{
+          cb(new Error('请输入合法的邮箱'))
+        }
+    }
+
+    //手机号验证规则
+    var checkMobile=(rule,value,cb)=>{
+        const regMobile=/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        if(regMobile.test(value)){
+          return cb()
+        }else{
+          cb(new Error('请输入合法的手机号码'))
+        }
+    }
     return {
       //获取用户列表参数
       queryInfo: {
@@ -135,14 +155,24 @@ export default {
             required: true,
             message: "请输入邮箱",
             trigger: "blur"
+          },
+          {
+            validator:checkEmail,
+            trigger: "blur"
           }
+          
         ],
         mobile:[
           {
             required: true,
             message: "请输入邮箱",
             trigger: "blur"
+          },
+          {
+            validator:checkMobile,
+            trigger: "blur"
           }
+          
         ]
       }
     };
@@ -184,6 +214,29 @@ export default {
       } else {
         this.$message.success("更新用户状态成功！");
       }
+    },
+    //监听添加用户对话框关闭事件
+    addDialogClosed(){
+      this.$refs.addFormRef.resetFields()
+    },
+    //点击按钮,添加新用户
+    addUser(){
+      this.$refs.addFormRef.validate(async valid=>{
+        console.log(valid)
+        if(!valid){
+          return 
+        }else{
+          //添加用户的请求
+       const {data:res}=await this.$http.post('users',this.addForm)
+           if(res.meta.status!==201){
+             return this.$message.error("添加用户消息失败！");
+           }else{
+             this.$message.success("添加用户信息成功！");
+             this.addDialogVisible=false;
+             this.getUserList();
+           }
+        }
+      })
     }
   }
 };
