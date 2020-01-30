@@ -14,7 +14,7 @@
         </el-col>
       </el-row>
       <!-- 角色列表 -->
-      <el-table :data="rolelist" stripe border>
+      <el-table :data="rolelist" stripe border class="elTable">
         <!-- 展开列 -->
         <el-table-column type="expand">
           <template slot-scope="scope">
@@ -223,5 +223,8 @@ export default {
 .vcenter {
   display: flex;
   align-items: center;
+}
+.elTable{
+  margin-top: 15px;
 }
 </style>
